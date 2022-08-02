@@ -2,6 +2,8 @@
 #include "stdio.h"
 #include <zephyr/sys/byteorder.h>
 
+LOG_MODULE_REGISTER(mpu_driver);
+
 MPU6050::MPU6050(const device *i2c_dev) : i2c_dev{i2c_dev} {
   MPU6050::initialize();
 }
@@ -106,8 +108,8 @@ std::uint8_t MPU6050::read_sensor_data() {
   imu_data_.gyro.y = gyro_y / gyro_lsb_sensitivity;
   imu_data_.gyro.z = gyro_z / gyro_lsb_sensitivity;
 
-  printf("%.4f\n", imu_data_.accel.x);
-  printf("%.4f\n", imu_data_.gyro.x);
+  // printf("%.4f\n", imu_data_.accel.x);
+  // printf("%.4f\n", imu_data_.gyro.x);
 
   return 1;
 }

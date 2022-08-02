@@ -6,8 +6,6 @@
 #include <zephyr/logging/log.h>
 #include <zephyr/zephyr.h>
 
-inline LOG_MODULE_REGISTER(mpu_driver);
-
 class MPU6050 {
 
 public:

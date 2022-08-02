@@ -10,6 +10,8 @@
 
 #include "mpu6050.hpp"
 
+LOG_MODULE_DECLARE(mpu_driver);
+
 int main() {
 
   static const struct device *i2c_dev = DEVICE_DT_GET(DT_NODELABEL(i2c1));
