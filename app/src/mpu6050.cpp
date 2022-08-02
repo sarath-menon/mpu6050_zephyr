@@ -111,6 +111,12 @@ std::uint8_t MPU6050::read_sensor_data() {
   // printf("%.4f\n", imu_data_.accel.x);
   // printf("%.4f\n", imu_data_.gyro.x);
 
+  char str[10]{};
+  sprintf(str, "%f", imu_data_.accel.x);
+  LOG_INF("Accel x: %s", str);
+  sprintf(str, "%f", imu_data_.gyro.y);
+  LOG_INF("Gyro x: %s", str);
+
   return 1;
 }
 
