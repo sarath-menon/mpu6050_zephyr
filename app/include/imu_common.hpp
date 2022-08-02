@@ -17,4 +17,8 @@ struct ImuData {
   SensorValues gyro;
 };
 
+enum class AccelerometerRange { _2_g, _4_g, _8_g, _16_g };
+
+enum class GyroscopeRange { _250_deg_per_s, _4_g, _8_g, _16_g };
+
 } // namespace imu
