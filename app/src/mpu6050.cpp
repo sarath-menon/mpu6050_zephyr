@@ -108,15 +108,17 @@ std::uint8_t MPU6050::read_sensor_data() {
   imu_data_.gyro.y = gyro_y / gyro_lsb_sensitivity;
   imu_data_.gyro.z = gyro_z / gyro_lsb_sensitivity;
 
-  // printf("%.4f\n", imu_data_.accel.x);
-  // printf("%.4f\n", imu_data_.gyro.x);
+  static int count{};
 
-  char str[10]{};
-  sprintf(str, "%f", imu_data_.accel.x);
-  LOG_INF("Accel x: %s", str);
-  sprintf(str, "%f", imu_data_.gyro.y);
-  LOG_INF("Gyro x: %s", str);
+  if ((count % 500) == 1) {
+    char str[10]{};
+    sprintf(str, "%f", imu_data_.accel.x);
+    LOG_INF("Accel x: %s", str);
+    sprintf(str, "%f", imu_data_.gyro.y);
+    LOG_INF("Gyro x: %s", str);
+  }
 
+  count++;
   return 1;
 }
 
