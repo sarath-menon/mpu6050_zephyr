@@ -32,7 +32,7 @@ private:
   constexpr static std::uint8_t MPU_ADDR = 0x68;
   constexpr static std::uint8_t MPU_WHO_AM_I_REG = 0x75;
 
-  constexpr static uint8_t SMPLRT_DIV_REG = 0x19;
+  constexpr static uint8_t SMPLRT_DIV_REG = 0x07;
   constexpr static uint8_t POWER_MNG_REG = 0x6B;
   constexpr static uint8_t ACCEL_CONFIG_REG = 0x1C;
   constexpr static uint8_t MPU_DATA_START_REG = 0x3B;
