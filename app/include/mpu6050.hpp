@@ -13,7 +13,8 @@ class MPU6050 {
 public:
   MPU6050(const device *i2c_dev);
 
-  std::uint8_t read_sensor();
+  std::uint8_t read_sensor_data();
+  std::uint8_t process_sensor_data();
 
 private:
   std::uint8_t initialize();

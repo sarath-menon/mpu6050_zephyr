@@ -16,9 +16,9 @@ int main() {
 
   MPU6050 imu(i2c_dev);
 
-  while (1) {
+  for (;;) {
 
-    imu.read_sensor();
+    imu.read_sensor_data();
 
     k_msleep(1000);
   }

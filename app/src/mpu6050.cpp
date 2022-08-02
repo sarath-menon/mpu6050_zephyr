@@ -1,5 +1,6 @@
 #include "mpu6050.hpp"
 #include "stdio.h"
+#include <zephyr/sys/byteorder.h>
 
 MPU6050::MPU6050(const device *i2c_dev) : i2c_dev{i2c_dev} {
   MPU6050::initialize();
@@ -75,27 +76,51 @@ std::uint8_t MPU6050::initialize() {
   return 1;
 }
 
-std::uint8_t MPU6050::read_sensor() {
+std::uint8_t MPU6050::read_sensor_data() {
   // holds data received from accel registers
-  std::uint8_t imu_data[12]{};
+  std::uint16_t buf[6]{};
 
-  // read data
-  if (i2c_burst_read(i2c_dev, MPU_ADDR, MPU_DATA_START_REG, imu_data, 12) < 0) {
+  // read data 12 bytes: (accel_x,accel_y,accel_z,gyro_x,gyro_y,gyro_z)
+  if (i2c_burst_read(i2c_dev, MPU_ADDR, MPU_DATA_START_REG, (uint8_t *)buf,
+                     12) < 0) {
     LOG_ERR("Failed to read data sample.");
     return -EIO;
   }
 
-  // left shight higher 8 bits and OR with lower 8 bits
-  std::int16_t accel_x = (int16_t)((imu_data[0] << 8) | imu_data[1]);
-  std::int16_t accel_y = (int16_t)((imu_data[2] << 8) | imu_data[3]);
-  std::int16_t accel_z = (int16_t)((imu_data[4] << 8) | imu_data[5]);
+  // converte from big endian to little endian
+  std::int16_t accel_x = sys_be16_to_cpu(buf[0]);
+  std::int16_t accel_y = sys_be16_to_cpu(buf[1]);
+  std::int16_t accel_z = sys_be16_to_cpu(buf[2]);
+
+  std::int16_t gyro_x = sys_be16_to_cpu(buf[3]);
+  std::int16_t gyro_y = sys_be16_to_cpu(buf[4]);
+  std::int16_t gyro_z = sys_be16_to_cpu(buf[5]);
 
   // convert accel readings to full scale range[0 - 16384]
   imu_data_.accel.x = accel_x / accel_lsb_sensitivity;
   imu_data_.accel.y = accel_y / accel_lsb_sensitivity;
   imu_data_.accel.z = accel_z / accel_lsb_sensitivity;
 
+  // convert gyro readings to full scale range[0 - 16384]
+  imu_data_.gyro.x = gyro_x / gyro_lsb_sensitivity;
+  imu_data_.gyro.y = gyro_y / gyro_lsb_sensitivity;
+  imu_data_.gyro.z = gyro_z / gyro_lsb_sensitivity;
+
   printf("%.4f\n", imu_data_.accel.x);
+  printf("%.4f\n", imu_data_.gyro.x);
+
+  return 1;
+}
+
+std::uint8_t MPU6050::process_sensor_data() {
+  // holds data received from accel registers
+
+  // // convert accel readings to full scale range[0 - 16384]
+  // imu_data_.accel.x = accel_x / accel_lsb_sensitivity;
+  // imu_data_.accel.y = accel_y / accel_lsb_sensitivity;
+  // imu_data_.accel.z = accel_z / accel_lsb_sensitivity;
+
+  // printf("%.4f\n", imu_data_.accel.x);
 
   return 1;
 }
