@@ -1,9 +1,9 @@
 &i2c1 {
-	mpu6050@68 {
+	mpu6050_imu:mpu6050@68 {
 		compatible = "invensense,mpu6050";
 		reg = <0x68>;
 		status = "okay";
 		label = "MPU6050";
-		int-gpios = <&gpioc 13 GPIO_ACTIVE_LOW>;
+		int-gpios = <&gpioc 13 GPIO_ACTIVE_HIGH>;
 	};
 };
